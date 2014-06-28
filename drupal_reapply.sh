@@ -24,12 +24,10 @@ git checkout -b reapply
 git reset --hard $BRANCH
 
 # Find the last commit the patch applies to.
-while : ; do
+while TRUE
+do
   git reset --hard HEAD^
-  git apply --index tmp.patch > /dev/null
-  if [ $? -eq 0 ]; then
-    break
-  fi
+  git apply --index tmp.patch > /dev/null && break
 done
 
 git commit -m "Applying $PATCH"
