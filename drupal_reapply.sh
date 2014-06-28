@@ -17,6 +17,7 @@
 PATCH="$1"
 BRANCH="$2"
 
+wget $PATCH -O tmp.patch
 # Get a branch to work in.
 git branch -D reapply
 git checkout -b reapply
@@ -25,7 +26,7 @@ git reset --hard $BRANCH
 # Find the last commit the patch applies to.
 while : ; do
   git reset --hard HEAD^
-  $(curl -s $PATCH | git apply --index - > /dev/null)
+  git apply --index tmp.patch > /dev/null
   if [ $? -eq 0 ]; then
     break
   fi
@@ -38,3 +39,5 @@ if [ $? -eq 0 ]; then
 else
   echo 'Reapply failed.'
 fi
+
+rm tmp.patch
