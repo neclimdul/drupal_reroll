@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Description
-# 
+#
 # Many patches don't apply but can easily be reapplied by using git's very
 # powerful merge tools. This script finds the last commit that the patch
 # applied to, makes a temporary commit and then tries to merge against the
@@ -21,13 +21,15 @@ wget $PATCH -O tmp.patch
 # Get a branch to work in.
 git branch -D reapply
 git checkout -b reapply
+sudo chmod a+w sites/default
 git reset --hard $BRANCH
 
 # Find the last commit the patch applies to.
-while TRUE
+while true
 do
-  git reset --hard HEAD^
   git apply --index tmp.patch > /dev/null && break
+  sudo chmod a+w sites/default
+  git reset --hard HEAD^
 done
 
 git commit -m "Applying $PATCH"
