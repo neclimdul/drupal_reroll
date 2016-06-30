@@ -17,7 +17,12 @@
 PATCH="$1"
 BRANCH="$2"
 
-wget $PATCH -O tmp.patch
+if [ -e $PATCH ]
+then
+	cp $PATCH tmp.patch
+else
+	wget $PATCH -O tmp.patch
+fi
 # Get a branch to work in.
 git branch -D reapply
 git checkout -b reapply
